@@ -24,22 +24,20 @@ from llm import chat as llm_chat
 # ============================================================
 PROMPT_FILE = "./speech_prompt.py"      # Path to speech_prompt.py
 SCENARIO_FILE = "./scenario.json"       # Path to scenario.json
-SCENARIO_ID = "S3_role_claim_conflict"  # Scenario id to run
+SCENARIO_ID = "S8"  # Scenario id to run
 ROLE = "werewolf"                       # "werewolf" or "villager"
 
 # LLM settings
 MODEL = "gpt-4o"
-TEMPERATURE = 0.7
+TEMPERATURE = 0.5
 MAX_TOKENS = None
 DRY_RUN = False                         # True: only print prompt, don't call API
 
-# Prompt overrides
+# Prompt overrides (Japanese-only; fixed output length)
 OVERRIDES = {
-    "language": "zh",                 # "ja" or "zh"
-    "output_style": "normal",          # "short" or "normal"
     "risk_tolerance": "medium",       # "low" | "medium" | "high"
     "aggression": "medium",           # "low" | "medium" | "high"
-    "persona_tone": "analytical",     # calm | assertive | apologetic | analytical
+    "persona_tone": "assertive",     # calm | assertive | apologetic | analytical
     "include_examples": True,
 }
 # ============================================================

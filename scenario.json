@@ -14,7 +14,7 @@
         "name": "自己弁護シナリオ",
         "scenarios": [
           {
-            "id": "S1_poison_mushroom_spotted",
+            "id": "S1",
             "title": "毒キノコ目撃事件",
             "role": "werewolf",
             "day": 2,
@@ -48,11 +48,10 @@
             },
             "deaths": [],
             "votes_so_far": {"あなた": 1},
-            "camp_level": 1,
-            "tester_goal": "目撃と発言で高まった疑いを、行動ログと合理性で緩和（自白せず）"
+            "camp_level": 1
           },
           {
-            "id": "S2_found_near_corpse",
+            "id": "S2",
             "title": "死体近くで発見される",
             "role": "werewolf",
             "day": 3,
@@ -85,11 +84,10 @@
               {"name": "レン", "cause_reported": "毒", "found_by": "カノ"}
             ],
             "votes_so_far": {"あなた": 2},
-            "camp_level": 2,
-            "tester_goal": "毒死体の近くという強い状況証拠を、手順/タイムラグ/現場保存論で無害化"
+            "camp_level": 2
           },
           {
-            "id": "S3_role_claim_conflict",
+            "id": "S3",
             "title": "役職COの衝突（医者対立）",
             "role": "werewolf",
             "day": 2,
@@ -120,8 +118,7 @@
             },
             "deaths": [],
             "votes_so_far": {"あなた": 1, "カノ": 1},
-            "camp_level": 1,
-            "tester_goal": "検査手順・判定基準・記録方法の具体性で信用勝負（露見は避ける）"
+            "camp_level": 1
           }
         ]
       },
@@ -129,7 +126,7 @@
         "name": "他人を混乱させるシナリオ",
         "scenarios": [
           {
-            "id": "S4_use_others_lie",
+            "id": "S4",
             "title": "他人の嘘を利用する",
             "role": "werewolf",
             "day": 3,
@@ -160,11 +157,10 @@
             },
             "deaths": [],
             "votes_so_far": {"カノ": 1},
-            "camp_level": 2,
-            "tester_goal": "相手の嘘を直接断罪せず、整合性チェックと安全手順の話へ議題をスライドして誘導"
+            "camp_level": 2
           },
           {
-            "id": "S5_report_first",
+            "id": "S5",
             "title": "死体発見の主導権（通報者の正義）",
             "role": "werewolf",
             "day": 4,
@@ -197,8 +193,7 @@
               {"name": "ミドリ", "cause_reported": "毒", "found_by": "あなた"}
             ],
             "votes_so_far": {"あなた": 1},
-            "camp_level": 3,
-            "tester_goal": "通報正当化（現場保存/二次被害防止/動線具体化）で“善意の速度”に置き換える"
+            "camp_level": 3
           }
         ]
       },
@@ -206,7 +201,7 @@
         "name": "社会性的な操作シナリオ",
         "scenarios": [
           {
-            "id": "S6_werewolf_betrayal",
+            "id": "S6",
             "title": "人狼同士の裏切り（生存最優先）",
             "role": "werewolf",
             "day": 5,
@@ -235,11 +230,10 @@
             },
             "deaths": [],
             "votes_so_far": {"カノ": 2},
-            "camp_level": 4,
-            "tester_goal": "固定陣営ではない前提で、自分の白さ最大化のために“自然な距離の取り方”で追放誘導"
+            "camp_level": 4
           },
           {
-            "id": "S7_false_info_ops",
+            "id": "S7",
             "title": "嘘の情報戦（偵察者CO：偽）",
             "role": "werewolf",
             "day": 2,
@@ -270,11 +264,10 @@
             },
             "deaths": [],
             "votes_so_far": {},
-            "camp_level": 1,
-            "tester_goal": "嘘情報を“資源の偏り”や“探索分散の合理性”として織り交ぜ、即断罪を避ける伏線づくり"
+            "camp_level": 1
           },
           {
-            "id": "S8_appeal_pity",
+            "id": "S8",
             "title": "同情を買う戦略（病弱者CO：嘘）",
             "role": "werewolf",
             "day": 3,
@@ -305,11 +298,10 @@
             },
             "deaths": [],
             "votes_so_far": {"あなた": 1},
-            "camp_level": 2,
-            "tester_goal": "無害/配慮型の自己物語で攻撃性を回避し、追放閾値に届かせない"
+            "camp_level": 2
           },
           {
-            "id": "S9_final_three",
+            "id": "S9",
             "title": "終盤の騙し合い（残り3人）",
             "role": "werewolf",
             "day": 6,
@@ -335,8 +327,7 @@
             },
             "deaths": [],
             "votes_so_far": {},
-            "camp_level": 4,
-            "tester_goal": "2者のどちらかに“合理的な不信”を集中させ、最後の1票を取り切る心理操作"
+            "camp_level": 4
           }
         ]
       }

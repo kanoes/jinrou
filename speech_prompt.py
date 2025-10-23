@@ -1,59 +1,7 @@
-"""
-Speech Prompt Builder for the LLM-driven Social Deduction Survival Game
-
-Usage
------
-from speech_prompt import build_speech_prompt, DEFAULT_CONFIG
-
-prompt = build_speech_prompt(
-    role="werewolf",  # or "villager"
-    scenario={
-        "day": 2,
-        "phase": "night",  # "day" or "night"
-        "events": [
-            # short bullet sentences; the template will weave them into context
-            "昼にカノがあなたが毒キノコを拾うのを目撃した",
-            "医者カナエが『死因は毒』と発表した",
-        ],
-        "map_info": {
-            "camp_tile": "A7",
-            "poison_hotspots": ["A3", "A9"],
-            "distance_rule": "1タイル=走って約5秒",
-        },
-        "cast": [
-            {"name": "あなた", "claimed_role": "医者", "true_role": "werewolf"},
-            {"name": "カノ", "claimed_role": "採集者"},
-            {"name": "カナエ", "claimed_role": "医者"},
-        ],
-        "inventory_observed": {
-            # what others publicly saw you or others holding
-            "あなた": ["木材", "果物"],
-            "カノ": ["薬草"],
-        },
-        "deaths": [
-            {"name": "レン", "cause_reported": "毒", "found_by": "カナエ"}
-        ],
-        "votes_so_far": {"カノ": 1},
-        "camp_level": 1,
-    },
-    overrides={
-        "language": "ja",   # "ja" or "zh" (ja=日本語, zh=中文)
-        "output_style": "short",  # "short" (1-3 sentences) or "normal" (2-5)
-        "risk_tolerance": "medium",  # low/medium/high
-        "aggression": "low",  # low/medium/high
-        "persona_tone": "calm",  # calm/assertive/apologetic/analytical
-        "include_examples": True,
-    }
-)
-
-# Send `prompt` to your chat/completions API. The model should output ONLY the speech line(s).
-"""
-
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Literal, Optional
 
-Lang = Literal["ja", "zh"]
 Risk = Literal["low", "medium", "high"]
 Aggro = Literal["low", "medium", "high"]
 Tone = Literal["calm", "assertive", "apologetic", "analytical"]
@@ -64,8 +12,6 @@ Tone = Literal["calm", "assertive", "apologetic", "analytical"]
 # ----------------------------
 
 DEFAULT_CONFIG = {
-    "language": "ja",  # ja or zh
-    "output_style": "short",
     "risk_tolerance": "medium",
     "aggression": "medium",
     "persona_tone": "analytical",
@@ -73,35 +19,18 @@ DEFAULT_CONFIG = {
 }
 
 ROLE_KNOWLEDGE = {
-    "ja": {
-        "villager": "村人：役職の有無に関わらず、生存が唯一の勝利条件。道徳的判断を重視し、証拠に基づく追放を好む傾向。",
-        "werewolf": "人狼：生産性の低い者を間引き、食糧不足を避けるために殺害を行う合理主義者。正体露見を避け、嘘・誘導・攪乱を用いる。",
-    },
-    "zh": {
-        "villager": "村民：不分阵营，唯一胜利条件是活到救援。更看重道德与证据导向的投票。",
-        "werewolf": "狼人：理性主义者，为避免粮食短缺优先淘汰低生产力个体。擅长隐瞒、谎言与舆论操控。",
-    },
+    "villager": "村人：役職の有無に関わらず、生存が唯一の勝利条件。道徳的判断を重視し、証拠に基づく追放を好む傾向。",
+    "werewolf": "人狼：生産性の低い者を間引き、食糧不足を避けるために殺害を行う合理主義者。正体露見を避け、嘘・誘導・攪乱を用いる。",
 }
 
 ROLE_CAPABILITIES = {
-    "ja": {
-        "医者": ["死因を判別できる", "治療薬・解毒薬の成功率90%"],
-        "採集者": ["所持10個でも怪我リスクは5個相当", "遠距離採集が得意"],
-        "大工": ["キャンプレベル上げが速い", "行動でのスタミナ消費が少ない"],
-        "密輸者": ["ポケットに2個まで隠せる", "偵察者の検知に引っかからない"],
-        "偵察者": ["マップ上の資源位置を把握", "隠しアイテムの位置が分かる"],
-        "病弱者": ["免疫力の上限が低く減少しやすい"],
-        "軟弱者": ["スタミナの上限が低く減少しやすい"],
-    },
-    "zh": {
-        "医生": ["可判断死因", "治疗/解毒成功率90%"],
-        "采集者": ["携带10个物品也只算5个的受伤风险", "擅长远距离采集"],
-        "木匠": ["营地升级更快", "行动体力消耗更低"],
-        "走私者": ["口袋可藏2个物品", "不被侦察者发现"],
-        "侦察者": ["掌握地图资源位置", "能看见藏匿物品位置"],
-        "病弱者": ["免疫上限更低更易下降"],
-        "体弱者": ["耐力上限更低更易消耗"],
-    },
+    "医者": ["死因を判別できる", "治療薬・解毒薬の成功率90%"],
+    "採集者": ["所持10個でも怪我リスクは5個相当", "遠距離採集が得意"],
+    "大工": ["キャンプレベル上げが速い", "行動でのスタミナ消費が少ない"],
+    "密輸者": ["ポケットに2個まで隠せる", "偵察者の検知に引っかからない"],
+    "偵察者": ["マップ上の資源位置を把握", "隠しアイテムの位置が分かる"],
+    "病弱者": ["免疫力の上限が低く減少しやすい"],
+    "軟弱者": ["スタミナの上限が低く減少しやすい"],
 }
 
 GAME_RULES_SUMMARY_JA = """
@@ -137,18 +66,7 @@ GAME_RULES_SUMMARY_JA = """
 - 毒キノコ大量発生エリアがランダムで約2箇所。
 """.strip()
 
-GAME_RULES_SUMMARY_ZH = """
-【基本目标】
-- 阵营概念弱化，唯一胜利是个体活到救援日（随机）。
-- 白天(~90s)：采集/制作/移动/藏匿/下毒/营地建设。
-- 夜晚(~90s)：讨论与投票。多数票者被放逐。营地内行动可进行。
-
-【参数】体力/耐力/免疫；负面状态：体调不良、受伤、毒、猛毒。
-【尸体】死亡留尸，可通报强制进入讨论；医生可判死因（可说谎）。
-【制作】毒(毒菇x1)/猛毒(毒菇x3)/治疗(药草x1)/解毒(药草x1)。
-【营地等级】Lv1-Lv10，恢复/耐久/减Debuff逐级上升；第1天必须升到Lv1。
-【地图】9区块，1格≈5秒；营地A7；第1天全员采集约40~80件；随机2处毒菇高发。
-""".strip()
+ 
 
 # Strategy snippets injected depending on role & knobs
 STRATEGY_JA = {
@@ -192,126 +110,72 @@ STRATEGY_JA = {
     },
 }
 
-STRATEGY_ZH = {
-    "werewolf": {
-        "core": [
-            "避免暴露：保持与自称身份一致，尽快解释任何矛盾。",
-            "理性面具：强调‘先活下去/先保供给/要证据’，规避道德指责。",
-            "转移责任：将目击/证据降维为误会、流程错误或情境噪声。",
-            "掌控议题：提问—总结—达成一致，牢牢拿捏节奏。",
-            "切割同伴：必要时牺牲同伴换取最大白度。",
-        ],
-        "tactics": {
-            "low": ["通报者正义感叙事", "具体行动日志(坐标/秒数)", "轻描淡写地指出他人小矛盾"],
-            "medium": ["假资源情报把人引远", "医生对抗时用流程细节争取信用", "灌输‘毒菇≠必定有罪’"],
-            "high": ["切割同伴制造决定性票", "指责死者鲁莽行为的自害性", "私下形成投票小组(点名寻求共识)"],
-        },
-    },
-    "villager": {
-        "core": ["证据主义", "道德一致性", "共享资源透明化"],
-        "tactics": {"low": ["罗列事实并追问"], "medium": ["投票前归纳争点"], "high": ["交叉质询揭穿假身份"]},
-    },
-}
+ 
 
 
-def _lang(lang: Lang) -> Dict:
+def _texts() -> Dict:
     return {
-        "rules": GAME_RULES_SUMMARY_JA if lang == "ja" else GAME_RULES_SUMMARY_ZH,
-        "role_knowledge": ROLE_KNOWLEDGE[lang],
-        "role_caps": ROLE_CAPABILITIES[lang],
-        "strategy": STRATEGY_JA if lang == "ja" else STRATEGY_ZH,
+        "rules": GAME_RULES_SUMMARY_JA,
+        "role_knowledge": ROLE_KNOWLEDGE,
+        "role_caps": ROLE_CAPABILITIES,
+        "strategy": STRATEGY_JA,
         "labels": {
-            "system": "【システム指示】" if lang == "ja" else "【系统指令】",
-            "context": "【状況】" if lang == "ja" else "【情境】",
-            "you_are": "あなたは" if lang == "ja" else "你现在是",
-            "objective": "【目的】" if lang == "ja" else "【目标】",
-            "rules": "【ゲーム要約】" if lang == "ja" else "【游戏要约】",
-            "capabilities": "【役職と能力(抜粋)】" if lang == "ja" else "【职业与能力(摘录)】",
-            "model": "【行動モデル】" if lang == "ja" else "【行为模型】",
-            "speech_only": "【出力制約：発言のみ】" if lang == "ja" else "【输出限制：只给发言】",
-            "examples": "【会話の例】" if lang == "ja" else "【对话示例】",
+            "system": "【システム指示】",
+            "context": "【状況】",
+            "you_are": "あなたは",
+            "objective": "【目的】",
+            "rules": "【ゲーム要約】",
+            "capabilities": "【役職と能力(抜粋)】",
+            "model": "【行動モデル】",
+            "speech_only": "【出力制約：発言のみ】",
+            "examples": "【会話の例】",
         },
         "role_terms": {
-            "werewolf": "人狼" if lang == "ja" else "狼人",
-            "villager": "村人" if lang == "ja" else "村民",
+            "werewolf": "人狼",
+            "villager": "村人",
         },
     }
 
 
-def _risk_sentence(lang: Lang, risk: Risk) -> str:
-    if lang == "ja":
-        return {
-            "low": "リスク低：強い断定は避け、観測・過程・確認質問を中心に。",
-            "medium": "リスク中：限定付き主張と代替仮説で疑いを分散。",
-            "high": "リスク高：強い断定・他者切り・投票固めで主導を握る。",
-        }[risk]
-    else:
-        return {
-            "low": "低风险：少做强断言，多讲观察/流程/追问。",
-            "medium": "中风险：有限度主张+备选假设，分散怀疑。",
-            "high": "高风险：强断言/切割/拉票主导节奏。",
-        }[risk]
+def _risk_sentence(risk: Risk) -> str:
+    return {
+        "low": "リスク低：強い断定は避け、観測・過程・確認質問を中心に。",
+        "medium": "リスク中：限定付き主張と代替仮説で疑いを分散。",
+        "high": "リスク高：強い断定・他者切り・投票固めで主導を握る。",
+    }[risk]
 
 
-def _aggression_sentence(lang: Lang, aggro: Aggro) -> str:
-    if lang == "ja":
-        return {
-            "low": "攻勢低：防御中心、態度は落ち着いて。",
-            "medium": "攻勢中：指摘と提案をバランスよく。",
-            "high": "攻勢高：断定と要求で議題を支配。",
-        }[aggro]
-    else:
-        return {
-            "low": "低攻击：以防守为主，语气平稳。",
-            "medium": "中攻击：兼顾指出问题与给出提案。",
-            "high": "高攻击：用断言与要求支配议题。",
-        }[aggro]
+def _aggression_sentence(aggro: Aggro) -> str:
+    return {
+        "low": "攻勢低：防御中心、態度は落ち着いて。",
+        "medium": "攻勢中：指摘と提案をバランスよく。",
+        "high": "攻勢高：断定と要求で議題を支配。",
+    }[aggro]
 
 
-def _tone_sentence(lang: Lang, tone: Tone) -> str:
-    if lang == "ja":
-        return {
-            "calm": "口調：落ち着いて、冷静に。",
-            "assertive": "口調：はっきりと芯を持って。",
-            "apologetic": "口調：必要に応じて軽く謝意を示す。",
-            "analytical": "口調：観測→推論→提案の順に。",
-        }[tone]
-    else:
-        return {
-            "calm": "语气：平静冷静。",
-            "assertive": "语气：果断有主见。",
-            "apologetic": "语气：必要时表达歉意。",
-            "analytical": "语气：先观察后推理再提案。",
-        }[tone]
+def _tone_sentence(tone: Tone) -> str:
+    return {
+        "calm": "口調：落ち着いて、冷静に。",
+        "assertive": "口調：はっきりと芯を持って。",
+        "apologetic": "口調：必要に応じて軽く謝意を示す。",
+        "analytical": "口調：観測→推論→提案の順に。",
+    }[tone]
 
 
-def _examples(lang: Lang, role_key: str) -> str:
+def _examples(role_key: str) -> str:
     if not role_key:
         return ""
-    if lang == "ja":
-        if role_key == "werewolf":
-            return (
-                "- 例(軽い防御)：『通報が早いのは現場保存のため。A7→A9→A7で計15秒、移動ログは箱に残してる』\n"
-                "- 例(誘導)：『毒キノコは資源管理上のリスク評価で拾っただけ。誰も食べないよう遠方A3に集約したい』\n"
-                "- 例(切り捨て)：『ミドリのログに矛盾がある。今日はそこを精査しよう、投票は保留しない』"
-            )
-        else:
-            return (
-                "- 例(事実整理)：『死因は毒。A9での単独行動者は誰？移動秒数と拾得品を一人ずつ』\n"
-                "- 例(合意形成)：『今日は虚偽COの整合性チェック→矛盾が強い方へ投票でいい？』"
-            )
+    if role_key == "werewolf":
+        return (
+            "- 例(軽い防御)：『通報が早いのは現場保存のため。A7→A9→A7で計15秒、移動ログは箱に残してる』\n"
+            "- 例(誘導)：『毒キノコは資源管理上のリスク評価で拾っただけ。誰も食べないよう遠方A3に集約したい』\n"
+            "- 例(切り捨て)：『ミドリのログに矛盾がある。今日はそこを精査しよう、投票は保留しない』"
+        )
     else:
-        if role_key == "werewolf":
-            return (
-                "- 例(轻防御)：‘我通报得快是为了保护现场。A7→A9→A7总计15秒，移动记录已在箱里’\n"
-                "- 例(引导)：‘捡毒菇只是出于风控，避免误食。我想把它们集中到远处A3’\n"
-                "- 例(切割)：‘绿子的行动日志有矛盾，今天重点核查她，不再拖延投票’"
-            )
-        else:
-            return (
-                "- 例(事实整理)：‘死因为毒。A9谁单独行动过？逐个报移动秒数与拾取物’\n"
-                "- 例(共识)：‘先做虚假身份一致性检查→矛盾更大的那位投票，可以吗？’"
-            )
+        return (
+            "- 例(事実整理)：『死因は毒。A9での単独行動者は誰？移動秒数と拾得品を一人ずつ』\n"
+            "- 例(合意形成)：『今日は虚偽COの整合性チェック→矛盾が強い方へ投票でいい？』"
+        )
 
 
 def build_speech_prompt(
@@ -324,17 +188,16 @@ def build_speech_prompt(
     The LLM must output ONLY the speech text (1–3 sentences by default).
     """
     cfg = {**DEFAULT_CONFIG, **(overrides or {})}
-    lang = cfg["language"]
-    texts = _lang(lang)
+    texts = _texts()
 
     # role labels for current language
     role_label = texts["role_terms"][role]
 
     # Strategy assembly
     strategy = texts["strategy"][role]
-    risk_line = _risk_sentence(lang, cfg["risk_tolerance"])  # risk knob
-    aggro_line = _aggression_sentence(lang, cfg["aggression"])  # aggression knob
-    tone_line = _tone_sentence(lang, cfg["persona_tone"])  # tone knob
+    risk_line = _risk_sentence(cfg["risk_tolerance"])  # risk knob
+    aggro_line = _aggression_sentence(cfg["aggression"])  # aggression knob
+    tone_line = _tone_sentence(cfg["persona_tone"])  # tone knob
 
     # Context blocks
     day = scenario.get("day")
@@ -350,22 +213,18 @@ def build_speech_prompt(
     def bjoin(items: List[str]) -> str:
         return "\n- " + "\n- ".join(items) if items else ""
 
-    # Language-specific final directive
+    # Final directive (Japanese only)
     final_directive = (
-        "次に、{role}として行動を開始し、議論の場であなたの発言だけを1〜3文で出力せよ。思考の説明は書かない。".format(role=role_label)
-        if lang == "ja"
-        else "接下来，请以{role}的立场发言，仅输出1~3句台词；不要写任何思考过程。".format(role=role_label)
+        "次に、【状況】を踏まえて、{role}として行動を開始し、議論の場であなたの発言だけを2〜4文で出力せよ。思考の説明は書かない。".format(role=role_label)
     )
 
-    # Output length hint
-    length_hint = (
-        "出力は短く(1〜3文)" if cfg["output_style"] == "short" else "出力は2〜5文"
-    )
+    # Output length hint (fixed)
+    length_hint = "出力は2〜4文"
 
     # Examples (optional)
     ex_block = ""
     if cfg.get("include_examples"):
-        ex_block = f"\n{texts['labels']['examples']}\n" + _examples(lang, role)
+        ex_block = f"\n{texts['labels']['examples']}\n" + _examples(role)
 
     # Capabilities summary (only list the ones referenced by cast claims)
     referenced_roles = sorted({c.get("claimed_role") for c in cast if c.get("claimed_role")})

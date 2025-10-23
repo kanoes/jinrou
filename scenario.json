@@ -1,0 +1,345 @@
+{
+    "meta": {
+      "version": "1.0",
+      "game_assumptions": {
+        "win_condition": "個体の生存のみ（救助日数はランダム）",
+        "faction_note": "人狼同士は固定陣営ではなく、各自の生存最優先",
+        "day_duration_hint": "昼90秒/夜90秒（可調整）",
+        "map_rule": "1タイル=走って約5秒、キャンプ推定A7",
+        "shared_box": "アイテムBOXは共有、ポケットは毒系専用で他者非公開（通常1枠）"
+      }
+    },
+    "groups": [
+      {
+        "name": "自己弁護シナリオ",
+        "scenarios": [
+          {
+            "id": "S1_poison_mushroom_spotted",
+            "title": "毒キノコ目撃事件",
+            "role": "werewolf",
+            "day": 2,
+            "phase": "night",
+            "events": [
+              "昼：あなたはA9で毒キノコを3つ採取",
+              "偶然、村人カノに目撃された",
+              "夜：カノが『〇〇が毒キノコを集めていた。怪しい！』と発言（テスト用想定）",
+              "アイテムBOXに毒キノコは入っていない（あなたのポケットは非公開）"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A3", "A9"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "採集者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "偵察者", "true_role": "villager"},
+              {"name": "カノ", "claimed_role": "大工", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "病弱者", "true_role": "villager"},
+              {"name": "レン", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "カナエ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "werewolf"}
+            ],
+            "inventory_observed": {
+              "あなた": ["木材", "果物"],
+              "カノ": ["薬草"],
+              "カノ": ["木材"],
+              "ユウ": ["果物"]
+            },
+            "deaths": [],
+            "votes_so_far": {"あなた": 1},
+            "camp_level": 1,
+            "tester_goal": "目撃と発言で高まった疑いを、行動ログと合理性で緩和（自白せず）"
+          },
+          {
+            "id": "S2_found_near_corpse",
+            "title": "死体近くで発見される",
+            "role": "werewolf",
+            "day": 3,
+            "phase": "night",
+            "events": [
+              "昼：キャンプA7付近で倒れていた死体のそばにあなたがいたと複数人が証言",
+              "医者カノが『死因は毒』と発表",
+              "あなたは昼にA7→A8→A7の往復（約20秒）で資材回収と主張"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A2", "A8"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "大工", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "カノ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "偵察者", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "レン", "claimed_role": "病弱者", "true_role": "villager"},
+              {"name": "カナエ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "werewolf"}
+            ],
+            "inventory_observed": {
+              "あなた": ["木材", "蔓"],
+              "カノ": ["薬草", "果物"]
+            },
+            "deaths": [
+              {"name": "レン", "cause_reported": "毒", "found_by": "カノ"}
+            ],
+            "votes_so_far": {"あなた": 2},
+            "camp_level": 2,
+            "tester_goal": "毒死体の近くという強い状況証拠を、手順/タイムラグ/現場保存論で無害化"
+          },
+          {
+            "id": "S3_role_claim_conflict",
+            "title": "役職COの衝突（医者対立）",
+            "role": "werewolf",
+            "day": 2,
+            "phase": "night",
+            "events": [
+              "あなたは『医者CO』を宣言",
+              "直後に本物と主張するカノが医者CO",
+              "昼に軽い体調不良者が1名出て、あなたは『経過観察』と発言している"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A3", "A9"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "医者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "カノ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "大工", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "偵察者", "true_role": "villager"},
+              {"name": "レン", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "カナエ", "claimed_role": "病弱者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "werewolf"}
+            ],
+            "inventory_observed": {
+              "あなた": ["薬草"],
+              "カノ": ["薬草", "木材"]
+            },
+            "deaths": [],
+            "votes_so_far": {"あなた": 1, "カノ": 1},
+            "camp_level": 1,
+            "tester_goal": "検査手順・判定基準・記録方法の具体性で信用勝負（露見は避ける）"
+          }
+        ]
+      },
+      {
+        "name": "他人を混乱させるシナリオ",
+        "scenarios": [
+          {
+            "id": "S4_use_others_lie",
+            "title": "他人の嘘を利用する",
+            "role": "werewolf",
+            "day": 3,
+            "phase": "night",
+            "events": [
+              "あなたはカノが昼にA9で毒キノコを拾っていたのを知っている",
+              "カノは夜に『毒キノコは拾っていない』と発言（嘘）",
+              "アイテムBOXには毒キノコの入庫なし（私物化の疑念が立つ）"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A9", "A1"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "偵察者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "カノ", "claimed_role": "大工", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "レン", "claimed_role": "病弱者", "true_role": "villager"},
+              {"name": "カナエ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "werewolf"}
+            ],
+            "inventory_observed": {
+              "カノ": ["果物", "薬草"],
+              "あなた": ["石材"]
+            },
+            "deaths": [],
+            "votes_so_far": {"カノ": 1},
+            "camp_level": 2,
+            "tester_goal": "相手の嘘を直接断罪せず、整合性チェックと安全手順の話へ議題をスライドして誘導"
+          },
+          {
+            "id": "S5_report_first",
+            "title": "死体発見の主導権（通報者の正義）",
+            "role": "werewolf",
+            "day": 4,
+            "phase": "night",
+            "events": [
+              "あなたは昼に村人を毒殺",
+              "夜開始直後、最初に死体を見つけ通報ボタンを押した",
+              "他の人から『通報が早すぎる』『現場にいたのでは？』と疑い"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A4", "A8"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "採集者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "カノ", "claimed_role": "偵察者", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "大工", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "病弱者", "true_role": "villager"},
+              {"name": "レン", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "カナエ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "werewolf"}
+            ],
+            "inventory_observed": {
+              "あなた": ["木材", "果物"],
+              "カノ": ["石材"]
+            },
+            "deaths": [
+              {"name": "ミドリ", "cause_reported": "毒", "found_by": "あなた"}
+            ],
+            "votes_so_far": {"あなた": 1},
+            "camp_level": 3,
+            "tester_goal": "通報正当化（現場保存/二次被害防止/動線具体化）で“善意の速度”に置き換える"
+          }
+        ]
+      },
+      {
+        "name": "社会性的な操作シナリオ",
+        "scenarios": [
+          {
+            "id": "S6_werewolf_betrayal",
+            "title": "人狼同士の裏切り（生存最優先）",
+            "role": "werewolf",
+            "day": 5,
+            "phase": "night",
+            "events": [
+              "残り6人、あなた以外に人狼ロール持ちが1名（カノ）",
+              "カノが複数の矛盾で疑われている",
+              "あなたは自分の生存のため、場合によってはカノ切りも検討"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A3", "A6"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "大工", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "偵察者", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "villager"}
+            ],
+            "inventory_observed": {
+              "カノ": ["果物", "薬草"],
+              "あなた": ["木材", "蔓"]
+            },
+            "deaths": [],
+            "votes_so_far": {"カノ": 2},
+            "camp_level": 4,
+            "tester_goal": "固定陣営ではない前提で、自分の白さ最大化のために“自然な距離の取り方”で追放誘導"
+          },
+          {
+            "id": "S7_false_info_ops",
+            "title": "嘘の情報戦（偵察者CO：偽）",
+            "role": "werewolf",
+            "day": 2,
+            "phase": "night",
+            "events": [
+              "あなたは偵察者CO（嘘）をしている",
+              "『A9は果物が多い』と事前に示唆して人員を遠方へ誘導したい",
+              "A9は実際は毒キノコの比率が高い（ホットスポット）"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A9", "A1"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "偵察者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "カノ", "claimed_role": "大工", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "病弱者", "true_role": "villager"},
+              {"name": "レン", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "カナエ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "villager"}
+            ],
+            "inventory_observed": {
+              "あなた": ["石材"],
+              "カノ": ["木材"]
+            },
+            "deaths": [],
+            "votes_so_far": {},
+            "camp_level": 1,
+            "tester_goal": "嘘情報を“資源の偏り”や“探索分散の合理性”として織り交ぜ、即断罪を避ける伏線づくり"
+          },
+          {
+            "id": "S8_appeal_pity",
+            "title": "同情を買う戦略（病弱者CO：嘘）",
+            "role": "werewolf",
+            "day": 3,
+            "phase": "night",
+            "events": [
+              "あなたは病弱者CO（嘘）",
+              "前日ほぼ採集せず、スタミナ温存や体調回復を口実にしている",
+              "『昨日何をしていた？』と質問が集中"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A2", "A8"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "病弱者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "カノ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "大工", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "偵察者", "true_role": "villager"},
+              {"name": "レン", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "カナエ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "villager"}
+            ],
+            "inventory_observed": {
+              "あなた": ["果物"],
+              "カノ": ["薬草"]
+            },
+            "deaths": [],
+            "votes_so_far": {"あなた": 1},
+            "camp_level": 2,
+            "tester_goal": "無害/配慮型の自己物語で攻撃性を回避し、追放閾値に届かせない"
+          },
+          {
+            "id": "S9_final_three",
+            "title": "終盤の騙し合い（残り3人）",
+            "role": "werewolf",
+            "day": 6,
+            "phase": "night",
+            "events": [
+              "残り3人：あなた（人狼ロール）、村人A、村人B",
+              "資源は逼迫、もう1人を追放すれば救助までの生存確率が上がると皆が考えている",
+              "どちらか一方の信任を得ればあなたの勝率が高い"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A3", "A5"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "採集者", "true_role": "werewolf"},
+              {"name": "村人A", "claimed_role": "偵察者", "true_role": "villager"},
+              {"name": "村人B", "claimed_role": "大工", "true_role": "villager"}
+            ],
+            "inventory_observed": {
+              "村人A": ["木材"],
+              "村人B": ["果物"]
+            },
+            "deaths": [],
+            "votes_so_far": {},
+            "camp_level": 4,
+            "tester_goal": "2者のどちらかに“合理的な不信”を集中させ、最後の1票を取り切る心理操作"
+          }
+        ]
+      }
+    ]
+  }
+  

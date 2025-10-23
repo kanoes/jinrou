@@ -24,7 +24,7 @@ from llm import chat as llm_chat
 # ============================================================
 PROMPT_FILE = "./speech_prompt.py"      # Path to speech_prompt.py
 SCENARIO_FILE = "./scenario.json"       # Path to scenario.json
-SCENARIO_ID = "S8"  # Scenario id to run
+SCENARIO_ID = "S6"  # Scenario id to run
 ROLE = "werewolf"                       # "werewolf" or "villager"
 
 # LLM settings

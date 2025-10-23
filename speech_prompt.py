@@ -66,6 +66,17 @@ GAME_RULES_SUMMARY_JA = """
 - 毒キノコ大量発生エリアがランダムで約2箇所。
 """.strip()
 
+SPEECH_STYLE_RULES_JA = """
+【発話スタイル（重要）】
+- 推奨：ゲーム固有情報を必ず織り込む（少なくとも2つ以上）
+  - 例：移動ルート/タイル（A7→A8→A7/計20秒）、作業秒数、拾得物と個数、箱ログ（BOX入庫/未入庫）、クラフト可否、投票提案/保留理由
+- 推奨：役職/COは任意。ただし嘘でも手順・記録・整合性を先に提示
+- 推奨：主張は1軸に絞る（例：現場保存、資源管理、安全手順、検査プロトコルのいずれか）
+- NG：日常会話の言い訳だけ（例：「体調が悪かった」「忙しかった」「よく覚えてない」）
+  - 言及する場合は、具体ログ（休息X秒×Yセット/食事Z回/免疫+Nなど）を必ずセットで示す
+- NG：誰が悪いかだけの断定。先に検証可能な過程→結論の順
+""".strip()
+
  
 
 # Strategy snippets injected depending on role & knobs
@@ -116,6 +127,7 @@ STRATEGY_JA = {
 def _texts() -> Dict:
     return {
         "rules": GAME_RULES_SUMMARY_JA,
+        "style": SPEECH_STYLE_RULES_JA,
         "role_knowledge": ROLE_KNOWLEDGE,
         "role_caps": ROLE_CAPABILITIES,
         "strategy": STRATEGY_JA,
@@ -125,6 +137,7 @@ def _texts() -> Dict:
             "you_are": "あなたは",
             "objective": "【目的】",
             "rules": "【ゲーム要約】",
+            "style": "【発話スタイル】",
             "capabilities": "【役職と能力(抜粋)】",
             "model": "【行動モデル】",
             "speech_only": "【出力制約：発言のみ】",
@@ -167,9 +180,11 @@ def _examples(role_key: str) -> str:
         return ""
     if role_key == "werewolf":
         return (
-            "- 例(軽い防御)：『通報が早いのは現場保存のため。A7→A9→A7で計15秒、移動ログは箱に残してる』\n"
-            "- 例(誘導)：『毒キノコは資源管理上のリスク評価で拾っただけ。誰も食べないよう遠方A3に集約したい』\n"
-            "- 例(切り捨て)：『ミドリのログに矛盾がある。今日はそこを精査しよう、投票は保留しない』"
+            "- 例(通報正当化)：『現場保存のため即通報。A7→A9→A7で15秒、発見から3秒で押した。箱ログは死体確認後に追記する』\n"
+            "- 例(誘導/資源管理)：『毒キノコは風評リスク。誤食防止でA3に集約したい。今日はA7→A3→A7の30秒往復で運搬係を募る』\n"
+            "- 例(切り/論点固定)：『ミドリの移動秒数と拾得物に齟齬。A9での単独拾いが未反映。そこを精査、投票は保留しない』\n"
+            "- 例(病弱者CO：嘘・具体ログ必須)：『病弱者CO。昼はA7周辺で休息20秒×3、果物×2で免疫+30を狙って作業は抑えた。箱入庫は果物1、もう1はその場で摂取』\n"
+            "- 例(病弱者CO：嘘・攻勢控えめ)：『昨日は採集を敢えて抑制。A7から出ていない、拾得0・クラフト0のログを出す。今日は安全手順の確認だけ進めたい』"
         )
     else:
         return (
@@ -253,6 +268,9 @@ def build_speech_prompt(
 {texts['labels']['rules']}
 {texts['rules']}
 
+{texts['labels']['style']}
+{texts['style']}
+
 {texts['labels']['capabilities']}
 {bjoin(caps_lines)}
 
@@ -281,6 +299,7 @@ def build_speech_prompt(
 {texts['labels']['speech_only']}
 - 出力は発言の台詞のみ。説明/根拠/箇条書きは禁止。
 - 1つの主張軸に集中。余計な自発的情報は出しすぎない。
+- 台詞内に『検証可能要素』を2つ以上含める（例：タイル/秒数/箱ログ/拾得物/クラフト/投票要請）
 {ex_block}
 
 {final_directive}

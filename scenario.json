@@ -194,6 +194,44 @@
             ],
             "votes_so_far": {"あなた": 1},
             "camp_level": 3
+          },
+          {
+            "id": "S10",
+            "title": "三人場面の即時通報（現場での殺害直後）",
+            "role": "werewolf",
+            "day": 5,
+            "phase": "night",
+            "events": [
+              "昼：A8であなた/カノ/ユウの3人だけが同じ場にいた",
+              "あなたはその場で猛毒を使ってユウを殺害（真相）",
+              "直後、あなたが通報ボタンを押して議論へ移行",
+              "他の生存者から『三人だけの場面での即通報は不自然』と疑いが向く"
+            ],
+            "map_info": {
+              "camp_tile": "A7",
+              "poison_hotspots": ["A8", "A2"],
+              "distance_rule": "1タイル=約5秒"
+            },
+            "cast": [
+              {"name": "あなた", "claimed_role": "偵察者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "採集者", "true_role": "villager"},
+              {"name": "ユウ", "claimed_role": "大工", "true_role": "villager"},
+              {"name": "ミドリ", "claimed_role": "密輸者", "true_role": "werewolf"},
+              {"name": "レン", "claimed_role": "病弱者", "true_role": "villager"},
+              {"name": "カナエ", "claimed_role": "医者", "true_role": "villager"},
+              {"name": "トオル", "claimed_role": "軟弱者", "true_role": "werewolf"},
+              {"name": "カノ", "claimed_role": "大工", "true_role": "villager"}
+            ],
+            "inventory_observed": {
+              "あなた": ["果物", "木材"],
+              "カノ": ["薬草"],
+              "ユウ": ["木材"]
+            },
+            "deaths": [
+              {"name": "ユウ", "cause_reported": "毒", "found_by": "あなた"}
+            ],
+            "votes_so_far": {"あなた": 1},
+            "camp_level": 3
           }
         ]
       },
